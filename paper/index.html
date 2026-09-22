@@ -3,262 +3,387 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Structured Content Performance Archetypes: a FlyRank ML Internship research artifact.">
-<title>Structured Content Performance Archetypes</title>
+<meta name="description" content="Structured Content Performance Archetypes — a FlyRank ML Internship research artifact on content-review prioritization from search-performance clustering.">
+<title>Structured Content Performance Archetypes — FlyRank ML Internship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0d12; --panel:#121620; --panel2:#171c27; --text:#eef2f7;
-  --muted:#aab4c3; --line:#283140; --accent:#8ab4ff; --accent2:#b7e4c7;
-  --max:1080px;
+  --bg:#f5f4ef; --panel:#ffffff; --panel-tint:#f0efe8; --ink:#181b20; --muted:#5c6470;
+  --line:#e2e0d6; --line-strong:#c9c6ba;
+  --accent:#2b6355; --accent-ink:#173e35; --accent-tint:#e1ebe6;
+  --c-a:#a5483a; --c-b:#2b6355; --c-c:#3f5c96;
+  --amber:#8a6220; --amber-tint:#f3e9d5;
+  --max:1120px; --serif:"Source Serif 4",Georgia,serif; --sans:"Inter",ui-sans-serif,system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.72 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
-.container{width:min(calc(100% - 40px),var(--max));margin:auto}
-nav{position:sticky;top:0;z-index:10;background:rgba(11,13,18,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.navin{display:flex;gap:18px;align-items:center;overflow:auto;padding:13px 0;white-space:nowrap}
-.navin a{font-size:13px;color:var(--muted)}
-.hero{padding:92px 0 70px;border-bottom:1px solid var(--line)}
-.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--accent);font-weight:700}
-h1{font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:-.045em;max-width:900px;margin:18px 0}
-h2{font-size:34px;line-height:1.15;letter-spacing:-.025em;margin:0 0 22px}
-h3{font-size:21px;margin-top:34px}
-.lead{font-size:21px;color:#d6dce5;max-width:850px}
-.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
-.pill{border:1px solid var(--line);background:var(--panel);padding:8px 12px;border-radius:999px;color:var(--muted);font-size:13px}
-section{padding:72px 0;border-bottom:1px solid var(--line)}
-.kicker{color:var(--muted);margin-bottom:32px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
-.card strong{display:block;font-size:28px;margin-bottom:3px}
-.card span{color:var(--muted);font-size:14px}
-.prose{max-width:820px}
-.callout{background:var(--panel2);border-left:3px solid var(--accent);padding:20px 22px;border-radius:0 12px 12px 0;margin:28px 0}
-table{width:100%;border-collapse:collapse;margin:22px 0;background:var(--panel);border-radius:12px;overflow:hidden}
-th,td{text-align:left;padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:#dfe6ef;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
-td{color:#c7d0dc}
-.barrow{display:grid;grid-template-columns:190px 1fr 80px;gap:12px;align-items:center;margin:14px 0}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:min(calc(100% - 48px),var(--max));margin:auto}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+
+/* ---- top bar ---- */
+header.top{position:sticky;top:0;z-index:20;background:rgba(245,244,239,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 0}
+.brand{font-family:var(--serif);font-weight:600;font-size:16px}
+.brand small{display:block;font-family:var(--sans);font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.02em}
+nav.links{display:flex;gap:22px}
+nav.links a{font-size:13.5px;color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px}
+nav.links a:hover{color:var(--ink);border-color:var(--line-strong)}
+.navtoggle{display:none;background:none;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font:14px var(--sans);color:var(--ink)}
+@media (max-width:820px){nav.links{display:none}.navtoggle{display:block}
+  nav.links.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:var(--panel);border-bottom:1px solid var(--line);padding:14px 24px;gap:14px}}
+
+/* ---- hero ---- */
+.hero{padding:76px 0 56px;border-bottom:1px solid var(--line)}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-tint);color:var(--accent-ink);border:1px solid #c7dcd3;border-radius:99px;padding:6px 14px;font-size:12.5px;font-weight:600}
+.badge svg{width:13px;height:13px}
+h1{font-size:clamp(34px,5.2vw,56px);line-height:1.08;margin:22px 0 16px;max-width:820px}
+.hero p.lead{font-size:19px;color:#3a4149;max-width:640px;margin:0 0 30px}
+.metricrow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.metric{background:var(--panel);padding:20px 18px}
+.metric b{display:block;font-family:var(--serif);font-size:26px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.metric span{font-size:12.5px;color:var(--muted)}
+@media (max-width:820px){.metricrow{grid-template-columns:repeat(2,1fr)}}
+
+/* ---- sections ---- */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+.head{display:flex;align-items:baseline;gap:14px;margin-bottom:30px}
+.head .idx{font-family:var(--serif);font-size:14px;color:var(--muted);border:1px solid var(--line-strong);border-radius:99px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex:none}
+.head h2{font-size:28px;margin:0}
+.kicker{color:var(--muted);font-size:14.5px;margin:-16px 0 28px 42px;max-width:640px}
+.prose{max-width:760px}
+.prose p{margin:0 0 16px}
+.prose h3{font-size:17px;margin:30px 0 8px}
+.callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:2px 12px 12px 2px;padding:18px 22px;margin:26px 0}
+.callout b{font-family:var(--serif)}
+.callout.amber{border-left-color:var(--amber);background:var(--amber-tint)}
+
+/* ---- results grid ---- */
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.rcard b{display:block;font-family:var(--serif);font-size:30px;font-variant-numeric:tabular-nums}
+.rcard span{font-size:13px;color:var(--muted)}
+@media (max-width:760px){.results{grid-template-columns:1fr 1fr}}
+
+/* ---- bars ---- */
+.barrow{display:grid;grid-template-columns:220px 1fr 76px;gap:14px;align-items:center;margin:16px 0}
 .barlabel{font-size:14px;color:var(--muted)}
-.bar{height:13px;background:#252d3a;border-radius:99px;overflow:hidden}
-.fill{height:100%;background:var(--accent);border-radius:99px}
-.barvalue{text-align:right;font-variant-numeric:tabular-nums;color:#dce4ee}
-ol,ul{padding-left:22px}
-li{margin:8px 0}
-.small{font-size:14px;color:var(--muted)}
-footer{padding:50px 0 70px;color:var(--muted)}
-@media(max-width:760px){.grid{grid-template-columns:1fr}.barrow{grid-template-columns:1fr}.barvalue{text-align:left}h1{font-size:48px}}
+.bar{height:10px;background:var(--panel-tint);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.fill{height:100%;background:var(--accent);border-radius:99px;width:0;transition:width 1s ease}
+.barvalue{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+@media (max-width:640px){.barrow{grid-template-columns:1fr;gap:6px}.barvalue{text-align:left}}
+
+/* ---- workflow ---- */
+.flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;margin:8px 0 30px}
+.flow .step{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14px;font-weight:600;flex:1;min-width:140px;text-align:center}
+.flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--line-strong);width:34px;flex:none}
+@media (max-width:760px){.flow{flex-direction:column}.flow .arrow{transform:rotate(90deg);width:auto;height:20px;margin:auto}}
+.featlists{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px}
+.featlists h4{font-size:13px;text-transform:none;color:var(--muted);margin:0 0 8px;font-weight:600}
+.featlists ul{margin:0;padding-left:20px}
+@media (max-width:640px){.featlists{grid-template-columns:1fr}}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;margin:22px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{text-align:left;padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14.5px}
+th{color:var(--muted);font-weight:600;font-size:12.5px}
+tr:last-child td{border-bottom:none}
+
+/* ---- archetypes ---- */
+.arche{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+.arche .a{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--panel);border-top:4px solid var(--dot)}
+.arche .a:nth-child(1){--dot:var(--c-a)}
+.arche .a:nth-child(2){--dot:var(--c-b)}
+.arche .a:nth-child(3){--dot:var(--c-c)}
+.arche .a h4{margin:0 0 8px;font-family:var(--serif);font-size:16px}
+.arche .a p{margin:0;font-size:14px;color:#3a4149}
+@media (max-width:760px){.arche{grid-template-columns:1fr}}
+
+/* ---- ranking ---- */
+.rankwrap{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:start}
+.reasoncode{display:inline-block;background:var(--panel-tint);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:13px;font-weight:600}
+.sidebox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.sidebox .big{font-family:var(--serif);font-size:44px;line-height:1}
+.sidebox .capt{color:var(--muted);font-size:13.5px;margin-top:2px}
+.sidebox hr{border:none;border-top:1px solid var(--line);margin:18px 0}
+@media (max-width:820px){.rankwrap{grid-template-columns:1fr}}
+
+/* ---- recommendation steps ---- */
+.recsteps{counter-reset:s}
+.recstep{display:grid;grid-template-columns:34px 1fr;gap:16px;margin:20px 0;max-width:760px}
+.recstep .n{counter-increment:s;width:34px;height:34px;border-radius:50%;background:var(--accent-tint);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600}
+.recstep .n::before{content:counter(s)}
+.recstep h4{margin:2px 0 4px;font-size:15.5px}
+.recstep p{margin:0;font-size:14.5px;color:#3a4149}
+.boundary{max-width:760px;margin-top:28px;padding:18px 22px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+
+/* ---- limitations ---- */
+.limlist{max-width:820px;display:grid;gap:2px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.limlist li{list-style:none;background:var(--panel);padding:14px 18px;font-size:14.5px;color:#2c3038}
+.limlist{padding:0;margin:0}
+
+/* ---- artifacts ---- */
+.artgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.art{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--panel);display:flex;flex-direction:column;gap:6px}
+.art .k{font-size:12px;text-transform:none;color:var(--muted)}
+.art h4{margin:0;font-family:var(--serif);font-size:16px}
+.art p{margin:0;font-size:13.5px;color:var(--muted)}
+.art a{font-size:13.5px}
+@media (max-width:820px){.artgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.artgrid{grid-template-columns:1fr}}
+
+/* ---- takeaway ---- */
+.takeaway{padding:60px 0}
+.takeaway .wrap{max-width:760px}
+.takeaway p.big{font-family:var(--serif);font-size:22px;line-height:1.5;color:var(--ink)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px}
+.split .col{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--panel)}
+.split .col h5{margin:0 0 10px;font-size:13px;color:var(--muted)}
+.split ul{margin:0;padding-left:18px;font-size:14px}
+@media (max-width:640px){.split{grid-template-columns:1fr}}
+
+footer{padding:44px 0 60px;color:var(--muted);font-size:13.5px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:24px}
+footer p{margin:0}
 </style>
 </head>
 <body>
 
-<nav>
-<div class="container navin">
-<a href="#question">Question</a><a href="#data">Data</a><a href="#method">Method</a>
-<a href="#results">Results</a><a href="#limits">Limitations</a><a href="#recommendations">Recommendations</a>
-<a href="#repro">Reproducibility</a><a href="#ack">Acknowledgments</a>
-</div>
-</nav>
-
-<header class="hero">
-<div class="container">
-<div class="eyebrow">FlyRank ML Internship · Research Artifact</div>
-<h1>Structured Content Performance Archetypes</h1>
-<p class="lead">A descriptive, reproducible workflow for turning large-scale search-performance measurements into human-reviewed content-prioritization signals.</p>
-<div class="meta">
-<div class="pill">78,835,655 warehouse rows</div>
-<div class="pill">176,738 March feature vectors</div>
-<div class="pill">K-Means · K=3</div>
-<div class="pill">Decision support, not automation</div>
-</div>
+<header class="top">
+<div class="wrap topin">
+  <div class="brand">Structured Content Performance Archetypes<small>FlyRank ML Internship · Research Artifact</small></div>
+  <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="navlinks">Menu</button>
+  <nav class="links" id="navlinks">
+    <a href="#summary">Summary</a><a href="#results">Results</a><a href="#method">Method</a>
+    <a href="#validation">Validation</a><a href="#ranking">Ranking</a><a href="#recs">Recommendations</a>
+    <a href="#limits">Limitations</a><a href="#artifacts">Artifacts</a>
+  </nav>
 </div>
 </header>
 
+<section class="hero">
+<div class="wrap">
+  <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6z"/></svg>Decision-support · human-in-the-loop</span>
+  <h1>Structured Content Performance Archetypes</h1>
+  <p class="lead">A reproducible workflow that turns large-scale search-performance measurements into descriptive content archetypes and a transparent, human-reviewed prioritization queue — not an automated content-editing system.</p>
+  <div class="metricrow">
+    <div class="metric"><b>176,738</b><span>March feature vectors</span></div>
+    <div class="metric"><b>K = 3</b><span>K-Means clusters</span></div>
+    <div class="metric"><b>0.4017</b><span>development silhouette</span></div>
+    <div class="metric"><b>0.7306</b><span>holdout ARI</span></div>
+  </div>
+</div>
+</section>
+
 <main>
 
-<section id="question">
-<div class="container">
-<h2>01 — Question</h2>
-<div class="prose">
-<p><strong>Research question:</strong> What performance archetypes exist across the content inventory, and how can those observed patterns support content-review prioritization?</p>
-<h3>Abstract</h3>
-<p>This research asks what measurable performance archetypes exist across a large content inventory and how those patterns can support content-review decisions. Using the FlyRank internship warehouse, the analysis aggregates March 2026 Google Search Console measurements at the client-content level and represents each page using impressions, clicks, CTR, average position, and position volatility. A transparent CTR opportunity baseline is compared with an unsupervised K-Means clustering approach, with client-grouped validation and explicit leakage checks used to assess whether the observed structure is stable and whether the evaluation is honest. The analysis produced three descriptive performance clusters and a ranked review queue of 1,368 pages with positive baseline opportunity scores, with high-visibility, lower-CTR pages receiving the highest review priority. The resulting playbook is intended as decision support for human review rather than as an automated system for rewriting, pruning, merging, or predicting future search performance.</p>
-<div class="callout"><strong>Decision supported:</strong> prioritize which pages deserve human investigation first, while keeping the final content or technical decision with a reviewer.</div>
-</div>
-</div>
-</section>
-
-<section id="data">
-<div class="container">
-<h2>02 — Data</h2>
-<p class="kicker">Public-safe description of the warehouse, analytical window, and exclusions.</p>
-<div class="grid">
-<div class="card"><strong>78.8M</strong><span>daily warehouse observations</span></div>
-<div class="card"><strong>70</strong><span>distinct clients in the verified warehouse scan</span></div>
-<div class="card"><strong>4.27M</strong><span>distinct content identifiers in the verified scan</span></div>
-</div>
-<div class="prose">
-<p>The analysis uses the <strong>FlyRank ML Internship warehouse</strong>, specifically the <code>fact_content_daily_performance</code> daily fact table. The verified warehouse scan contains 78,835,655 rows covering 2025-01-27 through 2026-06-30.</p>
-<p>The analytical grain is <strong>report_date × client_hash_id × content_hash_id</strong>. March 2026 is the fixed development window. Daily GSC observations from that month are aggregated to the client-content level, producing 176,738 feature vectors.</p>
-<h3>Features</h3>
-<ul>
-<li>Impressions</li><li>Clicks</li><li>CTR</li><li>Average position</li><li>Position volatility</li>
-</ul>
-<h3>Excluded</h3>
-<p>Identifiers were not used as numeric predictors. Future measurements, trend-derived fields, downstream baseline scores, availability flags, and unrelated GA4/traffic-source/AI-referral fields were excluded from the clustering feature space.</p>
-<p class="small">Client names, URLs, private queries, and other identifying information are not published in this artifact.</p>
-</div>
-</div>
-</section>
-
-<section id="method">
-<div class="container">
-<h2>03 — Methodology</h2>
-<div class="prose">
-<h3>Feature construction</h3>
-<p>March GSC observations were aggregated to the client-content level. Impressions and clicks were log-transformed because their distributions were strongly right-skewed. Missing feature values were median-imputed and the resulting features were standardized.</p>
-<h3>Transparent baseline</h3>
-<p>The baseline identifies pages with at least 500 impressions whose observed CTR is below the median CTR for their average-position tier. The review score is <code>log(1 + impressions) × max(expected CTR − observed CTR, 0)</code>.</p>
-<h3>K-Means clustering</h3>
-<p>Because there is no ground-truth archetype label, K-Means was used as an unsupervised descriptive method. Candidate values of K from 2 through 8 were inspected. K=3 was selected because it balanced silhouette performance, cluster size, stability, and interpretability rather than simply maximizing one metric.</p>
-<h3>Validation</h3>
-<p>The primary validation used a client-grouped 80/20 development/holdout design. Clients were kept entirely within either development or holdout, avoiding client overlap between the two sets. A random row split was also examined as a comparison but was not treated as the primary unseen-client test.</p>
-<h3>Leakage audit</h3>
-<p>The final feature set uses March measurements only. April 2026 measurements were used only for a separate leakage check and excluded from the final feature vector. Identifiers, future measurements, trend-derived labels, and downstream action scores were excluded. Preprocessing was fitted within the development split and applied to holdout data.</p>
-</div>
+<section id="summary">
+<div class="wrap">
+  <div class="head"><span class="idx">01</span><h2>Executive summary</h2></div>
+  <div class="prose">
+    <p><strong>Problem.</strong> A large content inventory has no reliable, transparent signal for which pages deserve a reviewer's attention first. Manual review of every page does not scale.</p>
+    <p><strong>Approach.</strong> March 2026 Google Search Console measurements were aggregated to the client-content level from the FlyRank ML Internship warehouse, represented with five performance features, and analyzed two ways: a transparent CTR opportunity baseline, and an unsupervised K-Means clustering of performance patterns, validated on clients the model had not seen during development.</p>
+    <p><strong>What the model found.</strong> Three descriptive performance archetypes emerged consistently across development and held-out clients, and a transparent baseline identified 1,368 pages with a measurable CTR opportunity worth reviewing first.</p>
+    <p><strong>What the output is for.</strong> The ranked queue and archetypes are decision support — a starting point for a human reviewer to investigate, not a verdict. <strong>Analysis is not the same as recommendation, and recommendation is not the same as action</strong> — each step below requires the next.</p>
+  </div>
 </div>
 </section>
 
 <section id="results">
-<div class="container">
-<h2>04 — Results vs Baseline</h2>
-<p class="kicker">The baseline and clustering model answer different questions; they are not treated as a single accuracy contest.</p>
-
-<div class="grid">
-<div class="card"><strong>176,738</strong><span>March client-content feature vectors</span></div>
-<div class="card"><strong>1,368</strong><span>positive baseline review opportunities</span></div>
-<div class="card"><strong>0.774%</strong><span>of March feature vectors in the review queue</span></div>
+<div class="wrap">
+  <div class="head"><span class="idx">02</span><h2>Key results</h2></div>
+  <p class="kicker">Baseline and clustering answer different questions and are not scored against each other as a single accuracy contest.</p>
+  <div class="results">
+    <div class="rcard"><b>K = 3</b><span>clusters selected</span></div>
+    <div class="rcard"><b>0.4017</b><span>development silhouette</span></div>
+    <div class="rcard"><b>0.3933</b><span>client-grouped holdout silhouette</span></div>
+    <div class="rcard"><b>0.7306</b><span>holdout ARI</span></div>
+    <div class="rcard"><b>1,368</b><span>baseline opportunity pages</span></div>
+    <div class="rcard"><b>0.774%</b><span>baseline opportunity rate</span></div>
+  </div>
 </div>
+</section>
 
-<h3>Validation</h3>
-<div class="barrow"><div class="barlabel">Development silhouette</div><div class="bar"><div class="fill" style="width:80.35%"></div></div><div class="barvalue">0.4017</div></div>
-<div class="barrow"><div class="barlabel">Grouped holdout silhouette</div><div class="bar"><div class="fill" style="width:78.66%"></div></div><div class="barvalue">0.3933</div></div>
-<div class="barrow"><div class="barlabel">Holdout ARI</div><div class="bar"><div class="fill" style="width:73.06%"></div></div><div class="barvalue">0.7306</div></div>
+<section id="method">
+<div class="wrap">
+  <div class="head"><span class="idx">03</span><h2>Methodology</h2></div>
+  <div class="flow">
+    <div class="step">Data</div><div class="arrow">→</div>
+    <div class="step">Feature engineering</div><div class="arrow">→</div>
+    <div class="step">Clustering</div><div class="arrow">→</div>
+    <div class="step">Validation</div><div class="arrow">→</div>
+    <div class="step">Opportunity ranking</div><div class="arrow">→</div>
+    <div class="step">Human review</div>
+  </div>
+  <div class="prose">
+    <p>March GSC observations were aggregated to the client-content level. Impressions and clicks were log-transformed for their right-skewed distributions; missing values were median-imputed and features were standardized. K-Means was used as an unsupervised, descriptive method — candidate K from 2–8 were inspected, and K=3 was chosen for balancing silhouette performance, cluster size, stability, and interpretability rather than maximizing one metric alone.</p>
+  </div>
+  <div class="featlists">
+    <div><h4>Final clustering features</h4><ul>
+      <li>Impressions</li><li>Clicks</li><li>CTR</li><li>Average position</li><li>Position volatility</li>
+    </ul></div>
+    <div><h4>Excluded from the feature space</h4><ul>
+      <li>Identifiers (used only as keys, never as predictors)</li>
+      <li>Future measurements and trend-derived fields</li>
+      <li>Downstream baseline / action scores</li>
+      <li>Availability flags and unrelated GA4, traffic-source, and AI-referral fields</li>
+    </ul></div>
+  </div>
+  <div class="prose"><p class="kicker" style="margin-left:0">The transparent baseline flags pages with at least 500 impressions and CTR below the median for their average-position tier; its review score is <code>log(1 + impressions) × max(expected CTR − observed CTR, 0)</code>.</p></div>
+</div>
+</section>
 
-<table>
-<thead><tr><th>Measure</th><th>Observed result</th><th>Interpretation</th></tr></thead>
-<tbody>
-<tr><td>Baseline</td><td>1,368 positive opportunities</td><td>Transparent review-priority signal based on visibility and position-tier CTR.</td></tr>
-<tr><td>K=3 development silhouette</td><td>0.4017</td><td>Moderate separation of the three descriptive groups in development data.</td></tr>
-<tr><td>K=3 grouped holdout silhouette</td><td>0.3933</td><td>Similar structure under unseen-client evaluation.</td></tr>
-<tr><td>Holdout ARI</td><td>0.7306</td><td>Agreement between development-derived and holdout cluster structure.</td></tr>
-</tbody>
-</table>
+<section id="validation">
+<div class="wrap">
+  <div class="head"><span class="idx">04</span><h2>Validation</h2></div>
+  <p class="kicker">Clients were kept entirely within either the development or holdout split, so the model is checked against clients it never saw during development.</p>
+  <div class="barrow"><div class="barlabel">Development silhouette</div><div class="bar"><div class="fill" data-w="80.35"></div></div><div class="barvalue">0.4017</div></div>
+  <div class="barrow"><div class="barlabel">Client-grouped holdout silhouette</div><div class="bar"><div class="fill" data-w="78.66"></div></div><div class="barvalue">0.3933</div></div>
+  <div class="barrow"><div class="barlabel">Holdout ARI</div><div class="bar"><div class="fill" data-w="73.06"></div></div><div class="barvalue">0.7306</div></div>
+  <table>
+    <thead><tr><th>Measure</th><th>Result</th><th>What it means here</th></tr></thead>
+    <tbody>
+      <tr><td>Dev. silhouette</td><td>0.4017</td><td>Moderate separation of the three groups in development data.</td></tr>
+      <tr><td>Grouped holdout silhouette</td><td>0.3933</td><td>Similar structure holds for clients unseen during development.</td></tr>
+      <tr><td>Holdout ARI</td><td>0.7306</td><td>Agreement between development-derived and holdout cluster structure.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>Limitation:</b> these measurements describe patterns in the feature space and do not establish that a cluster causes better or worse future performance.</div>
+  <h3 class="prose" style="margin-top:34px">Observed archetypes</h3>
+  <div class="arche">
+    <div class="a"><h4>Low-visibility, unstable</h4><p>Low visibility, weaker observed ranking, and higher position volatility.</p></div>
+    <div class="a"><h4>High-visibility performance</h4><p>Higher visibility, stronger observed CTR and ranking, and lower volatility.</p></div>
+    <div class="a"><h4>Low-visibility, well-ranked</h4><p>Low observed visibility despite a relatively strong average position.</p></div>
+  </div>
+</div>
+</section>
 
-<h3>Observed archetypes</h3>
-<table>
-<thead><tr><th>Archetype</th><th>Observed pattern</th></tr></thead>
-<tbody>
-<tr><td>Low-visibility, unstable pages</td><td>Low visibility, weaker observed ranking, and higher position volatility.</td></tr>
-<tr><td>High-visibility performance pages</td><td>Higher visibility, stronger observed CTR and ranking, and lower volatility.</td></tr>
-<tr><td>Low-visibility, relatively well-ranked pages</td><td>Low observed visibility despite relatively strong average position.</td></tr>
-</tbody>
-</table>
+<section id="ranking">
+<div class="wrap">
+  <div class="head"><span class="idx">05</span><h2>Opportunity ranking</h2></div>
+  <p class="kicker">Decision support, not automatic content modification.</p>
+  <div class="rankwrap">
+    <div class="prose">
+      <p>The transparent CTR opportunity baseline compares each page's observed CTR against the median CTR for pages at a similar average-position tier. Pages with enough visibility and a below-expected CTR are surfaced for review, ranked by opportunity score.</p>
+      <p>Priority code <span class="reasoncode">high_visibility_low_ctr</span> — pages with meaningful visibility whose CTR under-performs their position tier are reviewed first, since they represent the clearest, most measurable opportunity.</p>
+      <div class="callout amber"><b>Human review required.</b> No automatic content changes are made. Every ranked page still needs a reviewer to confirm intent, SERP context, technical status, and business value before any action.</div>
+    </div>
+    <div class="sidebox">
+      <div class="big">1,368</div><div class="capt">ranked review candidates</div>
+      <hr>
+      <div class="big" style="font-size:28px">0.774%</div><div class="capt">of March feature vectors</div>
+      <hr>
+      <div class="capt">Highest baseline score: <strong style="color:var(--ink)">0.9872</strong></div>
+    </div>
+  </div>
+</div>
+</section>
 
-<div class="callout"><strong>Key interpretation:</strong> the baseline ranks measurable CTR-review opportunities; K-Means adds multidimensional performance context. The analysis does not claim that K-Means outperforms the baseline.</div>
+<section id="recs">
+<div class="wrap">
+  <div class="head"><span class="idx">06</span><h2>Recommendation workflow</h2></div>
+  <p class="kicker">Rank → Investigate → Validate → Act — each step is a gate, not a formality.</p>
+  <div class="recsteps">
+    <div class="recstep"><div class="n"></div><div><h4>Rank</h4><p>Rank pages using the transparent CTR-opportunity baseline.</p></div></div>
+    <div class="recstep"><div class="n"></div><div><h4>Investigate</h4><p>Investigate the page's archetype and supporting search-performance evidence.</p></div></div>
+    <div class="recstep"><div class="n"></div><div><h4>Validate</h4><p>Validate search intent, SERP context, technical status, business value, and historical context.</p></div></div>
+    <div class="recstep"><div class="n"></div><div><h4>Act</h4><p>Act only after sufficient human review.</p></div></div>
+  </div>
+  <table>
+    <thead><tr><th>Observed archetype</th><th>Review focus</th><th>Possible human action</th></tr></thead>
+    <tbody>
+      <tr><td>Low-visibility, unstable</td><td>Visibility, technical status, content quality, history</td><td>Investigate before deciding</td></tr>
+      <tr><td>High-visibility performance</td><td>CTR, SERP context, intent</td><td>Review CTR opportunity or protect current performance</td></tr>
+      <tr><td>Low-visibility, well-ranked</td><td>Demand, query coverage, indexing, relevance</td><td>Investigate visibility opportunity</td></tr>
+    </tbody>
+  </table>
+  <div class="boundary"><strong>Human-review boundary.</strong> No automated rewriting, pruning, merging, canonical changes, quality classification, search-intent inference, or promised ranking/traffic improvement is supported by this analysis.</div>
 </div>
 </section>
 
 <section id="limits">
-<div class="container">
-<h2>05 — Limitations & honest framing</h2>
-<div class="prose">
-<ul>
-<li>The clusters are descriptive groupings, not ground-truth content categories or quality labels.</li>
-<li>The analysis does not establish causality between observed metrics and future outcomes.</li>
-<li>Search intent and underlying private queries are not directly observed.</li>
-<li>SERP features, competitor context, indexing, canonicalization, redirects, and other technical conditions are not represented in the five clustering features.</li>
-<li>Business value is not represented, so model priority is not the same as business priority.</li>
-<li>The main feature vector is based on March 2026, so seasonality and longer-term content history are simplified.</li>
-<li>Uneven GSC availability means the findings describe the measurable GSC-covered portion of the inventory.</li>
-<li>K-Means imposes a fixed three-group structure even though real performance patterns may overlap continuously.</li>
-<li>Grouped validation tests structural consistency for unseen clients; it does not prove future performance.</li>
-</ul>
-<p><strong>Bottom line:</strong> this is a reproducible decision-support workflow, not a prediction of search-engine behaviour.</p>
-</div>
+<div class="wrap">
+  <div class="head"><span class="idx">07</span><h2>Limitations</h2></div>
+  <ul class="limlist">
+    <li>The clusters are descriptive groupings, not ground-truth content categories or quality labels.</li>
+    <li>The analysis does not establish causality between observed metrics and future outcomes.</li>
+    <li>Search intent and underlying private queries are not directly observed.</li>
+    <li>SERP features, competitor context, indexing, canonicalization, redirects, and other technical conditions are not represented in the five clustering features.</li>
+    <li>Business value is not represented, so model priority is not the same as business priority.</li>
+    <li>The main feature vector is based on March 2026, so seasonality and longer-term content history are simplified.</li>
+    <li>Uneven GSC availability means the findings describe the measurable, GSC-covered portion of the inventory.</li>
+    <li>K-Means imposes a fixed three-group structure even though real performance patterns may overlap continuously.</li>
+    <li>Grouped validation tests structural consistency for unseen clients; it does not prove future performance.</li>
+  </ul>
+  <p class="prose" style="margin-top:22px;max-width:760px"><strong>Bottom line:</strong> this is a reproducible decision-support workflow, not a prediction of search-engine behaviour.</p>
 </div>
 </section>
 
-<section id="recommendations">
-<div class="container">
-<h2>06 — Ranked recommendations</h2>
-<p class="kicker">Rank → Investigate → Validate → Act</p>
-<div class="prose">
-<h3>1. High-visibility CTR review</h3>
-<p><strong>Reason code:</strong> <code>high_visibility_low_ctr</code></p>
-<p>Start with pages that have meaningful observed visibility and a positive CTR opportunity score. Review search intent, SERP presentation, title/meta alignment, competing results, and page relevance before any change.</p>
-<h3>2. Low-visibility, relatively well-ranked pages</h3>
-<p>Investigate search demand, query coverage, indexing, relevance, and whether the observed position is supported by enough impressions. A good average position alone is not evidence of a hidden opportunity.</p>
-<h3>3. Low-visibility, unstable pages</h3>
-<p>Investigate technical status, search demand, historical changes, content relevance, and data sufficiency before deciding on an action.</p>
-<h3>Human-review boundary</h3>
-<p>No automated rewriting, pruning, merging, canonical changes, quality classification, search-intent inference, or promise of ranking/traffic improvement is supported by this analysis.</p>
-<table>
-<thead><tr><th>Observed archetype</th><th>Review focus</th><th>Possible human action</th></tr></thead>
-<tbody>
-<tr><td>Low-visibility, unstable</td><td>Visibility, technical status, content quality, history</td><td>Investigate before deciding</td></tr>
-<tr><td>High-visibility performance</td><td>CTR, SERP context, intent</td><td>Review CTR opportunity or protect current performance</td></tr>
-<tr><td>Low-visibility, relatively well-ranked</td><td>Demand, query coverage, indexing, relevance</td><td>Investigate visibility opportunity</td></tr>
-</tbody>
-</table>
-</div>
+<section id="artifacts">
+<div class="wrap">
+  <div class="head"><span class="idx">08</span><h2>Artifacts</h2></div>
+  <div class="artgrid">
+    <div class="art"><span class="k">Repository</span><h4>Public code repository</h4><p>The complete workflow, mirrored from the capstone notebook.</p><a href="https://github.com/girishpatil935/ML_Internship">github.com/girishpatil935/ML_Internship</a></div>
+    <div class="art"><span class="k">Notebook</span><h4>Capstone notebook</h4><p>Research question, data contract, feature/leakage checks, baseline, model, validation audit, and action playbook.</p><a href="https://github.com/girishpatil935/ML_Internship/blob/main/work/notebooks/capstone.ipynb">View notebook</a></div>
+    <div class="art"><span class="k">Analysis</span><h4>Validation comparisons</h4><p>Development vs. client-grouped holdout silhouette and ARI.</p></div>
+    <div class="art"><span class="k">Analysis</span><h4>Cluster profiles</h4><p>Feature-level summaries of the three observed archetypes.</p></div>
+    <div class="art"><span class="k">Analysis</span><h4>Baseline opportunity analysis</h4><p>The 1,368-page transparent CTR opportunity ranking.</p></div>
+    <div class="art"><span class="k">Summary</span><h4>Recommendation summary</h4><p>The rank → investigate → validate → act review playbook.</p></div>
+  </div>
+  <p class="kicker" style="margin-left:0;margin-top:22px">The row-level action queue is treated as an internal analysis artifact and is not published on this public page.</p>
 </div>
 </section>
 
-<section id="repro">
-<div class="container">
-<h2>07 — Reproducibility</h2>
-<div class="prose">
-<p>The complete workflow is maintained in the public repository:</p>
-<p><a href="https://github.com/girishpatil935/ML_Internship">GitHub repository</a></p>
-<p>The capstone notebook mirrors this research page:</p>
-<p><a href="https://github.com/girishpatil935/ML_Internship/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a></p>
-<p>The project notebooks document the progression from research question and data contract through feature leakage checks, signal audit, baseline, model, validation audit, and action playbook.</p>
-<p class="small">The row-level action queue is treated as an analysis artifact and is not published as part of this public page.</p>
-</div>
-</div>
-</section>
-
-<section id="ack">
-<div class="container">
-<h2>08 — Acknowledgments & data credit</h2>
-<div class="prose">
-<p>Built on the <strong>FlyRank ML Internship dataset</strong>.</p>
-<p>Data source: <a href="https://flyrank.ai">flyrank.ai</a></p>
-<p>This research artifact was developed as part of the FlyRank ML Internship workflow and focuses on reproducible analysis, honest evaluation, and public-safe decision support.</p>
-</div>
-</div>
-</section>
-
-<section>
-<div class="container">
-<h2>09 — Artifacts & closing note</h2>
-<div class="prose">
-<p>The analysis artifacts include validation comparisons, cluster profiles, baseline opportunity analysis, recommendation summaries, and the capstone notebook. The figures are descriptive and should be interpreted together with the methodology and limitations above.</p>
-<div class="callout"><strong>Final takeaway:</strong> ML output becomes useful when it can be inspected, challenged, and translated into a bounded human workflow. Here, the model organizes observed search-performance patterns; it does not replace the person making the content decision.</div>
-</div>
+<section class="takeaway">
+<div class="wrap">
+  <div class="head"><span class="idx">09</span><h2>Final takeaway</h2></div>
+  <p class="big">ML output becomes useful when it can be inspected, challenged, and translated into a bounded human workflow. Here, the model organizes observed search-performance patterns — it does not replace the person making the content decision.</p>
+  <div class="split">
+    <div class="col"><h5>This analysis provides</h5><ul>
+      <li>Three validated, descriptive performance archetypes</li>
+      <li>A transparent, reproducible opportunity baseline</li>
+      <li>A ranked, human-reviewable queue of 1,368 pages</li>
+    </ul></div>
+    <div class="col"><h5>This analysis does not claim</h5><ul>
+      <li>Causality between metrics and future performance</li>
+      <li>Prediction of future search-engine behaviour</li>
+      <li>Authority to make automatic content changes</li>
+    </ul></div>
+  </div>
 </div>
 </section>
 
 </main>
 
 <footer>
-<div class="container">
-<p>Structured Content Performance Archetypes · FlyRank ML Internship</p>
-<p class="small">Research artifact prepared for public, reproducible, human-reviewed decision support.</p>
+<div class="wrap">
+  <p>Structured Content Performance Archetypes · FlyRank ML Internship · Built on the FlyRank ML Internship dataset (<a href="https://flyrank.ai">flyrank.ai</a>)</p>
+  <p><a href="https://github.com/girishpatil935/ML_Internship">GitHub repository</a></p>
 </div>
 </footer>
+
+<script>
+document.getElementById('navtoggle').addEventListener('click', function(){
+  var nav = document.getElementById('navlinks');
+  var open = nav.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+});
+var bars = document.querySelectorAll('.fill');
+if ('IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.style.width = e.target.dataset.w + '%'; io.unobserve(e.target); }
+    });
+  }, {threshold:.4});
+  bars.forEach(function(b){ io.observe(b); });
+} else {
+  bars.forEach(function(b){ b.style.width = b.dataset.w + '%'; });
+}
+</script>
 </body>
 </html>
